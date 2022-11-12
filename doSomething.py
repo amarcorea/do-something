@@ -11,9 +11,9 @@ lastMovementAux = None
 timeElapsed = None
 debug = True
 
-CLIC_COORDINATES = (13,1059)
-NOACTIVITY = 10  # En segundos
-SENSORTIME = 3
+CLIC_COORDINATES = (13,1059) # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
+NOACTIVITY = 4 * 60  # En segundos, debe ser menor al tiempo de screensaver
+SENSORTIME = 30 # Sensor para validar inactividad
 
 
 def log(msg, fn=""):
@@ -82,7 +82,6 @@ def init():
         diff_seconds = getDifference(lastMovement, datetime.now())
         diff_minutes = divmod(diff_seconds, 60)[0]
 
-        log(str(diff_seconds)+" > " + str(NOACTIVITY), run.__name__)
         if diff_seconds > NOACTIVITY:
             log("Tiempo transcurrido en segundos: {0} minuto(s)".format(diff_seconds), run.__name__)
             log("Tiempo transcurrido en minutos : {0} minuto(s)".format(diff_minutes), run.__name__)
