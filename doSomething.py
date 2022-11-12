@@ -3,6 +3,7 @@ from pynput import mouse as ml
 from datetime import datetime
 import pyautogui
 import time
+from random import randint
 
 pyautogui.FAILSAFE = False
 lastMovement = datetime.now()
@@ -11,7 +12,7 @@ lastMovementAux = None
 timeElapsed = None
 debug = True
 
-CLIC_COORDINATES = (13,1059) # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
+XSCREEN,YSCREEN = pyautogui.size() # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
 NOACTIVITY = 4 * 60  # En segundos, debe ser menor al tiempo de screensaver
 SENSORTIME = 30 # Sensor para validar inactividad
 
@@ -67,14 +68,17 @@ def initMouseListener():
 
 def doMovement():
     global timeCurrent
-    pyautogui.moveTo(CLIC_COORDINATES[0], CLIC_COORDINATES[1])
+    x = randint(1, XSCREEN)
+    y = randint(1, YSCREEN)
+    pyautogui.moveTo(x, y)
     pyautogui.click()
     refreshTime()
-    log("Activando equipo - click en coordenadas ({0},{1})".format(CLIC_COORDINATES[0],CLIC_COORDINATES[1]), doMovement.__name__)
+    log("Activando equipo - click en coordenadas ({0},{1})".format(x,y), doMovement.__name__)
 
 def init():
     global lastMovement
     global timeCurrent
+    
 
     log("Inicializando variables", run.__name__)
 
