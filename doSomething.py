@@ -13,6 +13,8 @@ timeElapsed = None
 debug = True
 
 XSCREEN,YSCREEN = pyautogui.size() # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
+CLICK_RANDOM = True
+XCOOR, YCOOR = [21, 1059] # Si click random es False, se toma este parámetro, de otro modo toma XCREEN y YSCREEN
 NOACTIVITY = 4 * 60  # En segundos, debe ser menor al tiempo de screensaver
 SENSORTIME = 30 # Sensor para validar inactividad
 
@@ -68,8 +70,10 @@ def initMouseListener():
 
 def doMovement():
     global timeCurrent
-    x = randint(1, XSCREEN)
-    y = randint(1, YSCREEN)
+    global XCREEN, YSCCREEN
+    XSCREEN,YSCREEN = pyautogui.size()
+    x = randint(1, XSCREEN) if CLICK_RANDOM == True else XCOOR
+    y = randint(1, YSCREEN) if CLICK_RANDOM == True else YCOOR
     pyautogui.moveTo(x, y)
     pyautogui.click()
     refreshTime()
