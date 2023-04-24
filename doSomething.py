@@ -13,7 +13,7 @@ timeElapsed = None
 debug = True
 
 XSCREEN,YSCREEN = pyautogui.size() # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
-CLICK_RANDOM = True
+CLICK_RANDOM = False
 XCOOR, YCOOR = [21, 1059] # Si click random es False, se toma este parámetro, de otro modo toma XCREEN y YSCREEN
 NOACTIVITY = 4 * 60  # En segundos, debe ser menor al tiempo de screensaver
 SENSORTIME = 30 # Sensor para validar inactividad
@@ -76,6 +76,9 @@ def doMovement():
     y = randint(1, YSCREEN) if CLICK_RANDOM == True else YCOOR
     pyautogui.moveTo(x, y)
     pyautogui.click()
+    if not CLICK_RANDOM:
+        time.sleep(1)
+        pyautogui.click()
     refreshTime()
     log("Activando equipo - click en coordenadas ({0},{1})".format(x,y), doMovement.__name__)
 
