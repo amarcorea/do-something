@@ -1,3 +1,6 @@
+#Author Marco Rea <amarco.rea@gmail.com>
+#v1. New program. Do click every N seconds to keep alive the host
+
 from pynput import keyboard as kb
 from pynput import mouse as ml
 from datetime import datetime
@@ -12,11 +15,11 @@ lastMovementAux = None
 timeElapsed = None
 debug = True
 
-XSCREEN,YSCREEN = pyautogui.size() # Coordenadas para hacer clic de la resolución de pantalla x=13, Y=1059
-CLICK_RANDOM = False
-XCOOR, YCOOR = [21, 1059] # Si click random es False, se toma este parámetro, de otro modo toma XCREEN y YSCREEN
-NOACTIVITY = 4 * 60  # En segundos, debe ser menor al tiempo de screensaver
-SENSORTIME = 30 # Sensor para validar inactividad
+XSCREEN,YSCREEN = pyautogui.size() # X,Y coordinates to init with the resolution, Ex. x=15, y=1059
+CLICK_RANDOM = False # True if you want click in random coordinates
+XCOOR, YCOOR = [21, 1059] # If CLICK_RANDOM is true, this value is taken by default in another way it takes XSCREEN,YSCREEN
+NOACTIVITY = 4 * 60  # Value in seconds, it must be less than screensaver time, Ex. 240 seconds.
+SENSORTIME = 30 # Value in seconds, as a ping command to exec the clic activity, Ex. every 30 seconds exec click (random or not) as long as you dont have an activity previously
 
 
 def log(msg, fn=""):
@@ -31,24 +34,24 @@ def refreshTime():
     lastMovementAux = lastMovement
     lastMovement = datetime.now()
 
-    log("Último movimiento anterior: {0}".format(lastMovementAux), refreshTime.__name__)
-    log("Último movimiento actual  : {0}".format(lastMovement), refreshTime.__name__)
+    log("Older last activity  : {0}".format(lastMovementAux), refreshTime.__name__)
+    log("Current last activity: {0}".format(lastMovement), refreshTime.__name__)
 
 
 def onPress(key):
-    log("Se ha pulsado la tecla {0}".format(key), onPress.__name__)
+    log("Key pressed: {0}".format(key), onPress.__name__)
     refreshTime()
 
 
 def onClick(x, y, button, pressed):
     if pressed:
-        log("Se ha clickeado el botón {0} en ({1},{2})".format(
+        log("Click button {0} in ({1},{2})".format(
             button, x, y), onClick.__name__)
         refreshTime()
 
 
 def onScroll(x, y, dx, dy):
-    log("Se ha hecho scroll en ({0},({1},{2},{3})".format(
+    log("Scroll identified in: ({0},({1},{2},{3})".format(
         x, y, dx, dy), onScroll.__name__)
     refreshTime()
 
@@ -80,22 +83,22 @@ def doMovement():
         time.sleep(1)
         pyautogui.click()
     refreshTime()
-    log("Activando equipo - click en coordenadas ({0},{1})".format(x,y), doMovement.__name__)
+    log("Activating host - click in coordinates ({0},{1})".format(x,y), doMovement.__name__)
 
 def init():
     global lastMovement
     global timeCurrent
     
 
-    log("Inicializando variables", run.__name__)
+    log("Starting variables", run.__name__)
 
     while True:
         diff_seconds = getDifference(lastMovement, datetime.now())
         diff_minutes = divmod(diff_seconds, 60)[0]
 
         if diff_seconds > NOACTIVITY:
-            log("Tiempo transcurrido en segundos: {0} minuto(s)".format(diff_seconds), run.__name__)
-            log("Tiempo transcurrido en minutos : {0} minuto(s)".format(diff_minutes), run.__name__)
+            log("Elapsed time in seconds: {0} seconds(s)".format(diff_seconds), run.__name__)
+            log("Elapsed time in minutes: {0} minutes(s)".format(diff_minutes), run.__name__)
             doMovement()
 
         time.sleep(SENSORTIME)
