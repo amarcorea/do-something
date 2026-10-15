@@ -17,4 +17,5 @@ C:\binaries\python3-10\pythonw.exe c:\mi_ruta\do-something\doSomething.py
 
 ## Linux execution
 This command will create an new environemnt if is necessary
-./run
+
+`./run`
